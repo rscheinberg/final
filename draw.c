@@ -9,6 +9,48 @@
 #include "gmath.h"
 #include "symtab.h"
 
+/*======== void mesh() ==========
+  Inputs: struct matrix *polys
+          char *filename
+
+  Mesh parser for .obj files
+  ====================*/
+void mesh(struct matrix *polys, char *filename) {
+
+  FILE *f;
+  char line[256];
+  f = fopen(filename, "r");
+  
+  //reads through file line by line
+  while ( fgets(line, 255, f) != NULL ) {
+
+    line[strlen(line)-1]='\0';
+    double args[4][5];
+
+    //2d objects
+    //test for line
+    if(line[0] == 'v') {
+
+      sscanf(line, "%c %lf %lf %lf", &line[0], &args[0][0], &args[1][0], &args[2][0], &args[3][0], &args[4][0], &args[5][0]);
+
+      fgets(line, 255, f);
+      line[strlen(line)-1]='\0';
+      sscanf(line, "%c %lf %lf %lf", &line[0], &args[0][1], &args[1][1], &args[2][1], &args[3][1], &args[4][1], &args[5][1]);
+
+      fgets(line, 255, f);
+      line[strlen(line)-1]='\0';
+      sscanf(line, "%c %lf %lf %lf", &line[0], &args[0][2], &args[1][2], &args[2][2], &args[3][2], &args[4][2], &args[5][2]);
+
+      fgets(line, 255, f);
+      line[strlen(line)-1]='\0';
+      sscanf(line, "%c %lf %lf %lf", &line[0], &args[0][3], &args[1][3], &args[2][3], &args[3][3], &args[4][3], &args[5][3]);
+
+      add_polygons(polys, args[0][0], args[1][0], args[2][0], args[0][1], args[1][1], args[2][1], args[0][2], args[1][2], args[2][2]);
+      add_polygons(polys, args[0][0], args[1][0], args[2][0], args[0][2], args[1][2], args[2][2], args[0][3], args[1][3], args[2][3])
+    }
+  }
+}
+
 /*======== void draw_scanline() ==========
   Inputs: struct matrix *points
           int i

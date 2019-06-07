@@ -484,7 +484,7 @@ ROTATE STRING DOUBLE STRING
       op[lastop].op.rotate.axis = 1;
       break;
     case 'z':
-    case 'Z':
+    case '':
       op[lastop].op.rotate.axis = 2;
       break;
     }
@@ -769,6 +769,8 @@ GENERATE_RAYFILES
   lastop++;
 };
 %%
+
+
 
 
 /* Other C stuff */

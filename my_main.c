@@ -400,6 +400,13 @@ void my_main() {
           //printf("Display");
           display(t);
           break;
+        case MESH:
+          char *filename = op.i.mesh[0];
+          mesh(tmp, filename);
+          matrix_mult( peek(systems), tmp );
+          draw_polygons(tmp, t, zb, view, light, ambient, reflect);
+          tmp->lastcol = 0;
+          break;
         }
       save_extension(t, frame_name);
       //printf("\n");
