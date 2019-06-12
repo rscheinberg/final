@@ -9,6 +9,7 @@
 #include "gmath.h"
 #include "symtab.h"
 
+
 /*======== void mesh() ==========
   Inputs: struct matrix *polys
           char *filename
@@ -20,35 +21,47 @@ void mesh(struct matrix *polys, char *filename) {
   FILE *f;
   char line[256];
   f = fopen(filename, "r");
+  struct matrix *v = new_matrix(3, 100);
   
   //reads through file line by line
   while ( fgets(line, 255, f) != NULL ) {
 
     line[strlen(line)-1]='\0';
-    double args[4][5];
 
-    //2d objects
-    //test for line
+    //vertex coordinates
     if(line[0] == 'v') {
+      if(v.lastcol == v.cols) grow_matrix(v, v.cols * 2);
+      sscanf(line, "%c %lf %lf %lf", , &v->m[0][lastcol], &v->m[1][lastcol], &v->m[2][lastcol]);
+      v->lastcol++;
+    }
 
-      sscanf(line, "%c %lf %lf %lf", &line[0], &args[0][0], &args[1][0], &args[2][0], &args[3][0], &args[4][0], &args[5][0]);
+    //vertex shapes
+    else if(line[0] == 'f') {
+      double args[4];
+      int spaces = 0;
+      for(i = 0; a[i] != '\0'; i++) if (a[i] == ' ') spaces++;
 
-      fgets(line, 255, f);
-      line[strlen(line)-1]='\0';
-      sscanf(line, "%c %lf %lf %lf", &line[0], &args[0][1], &args[1][1], &args[2][1], &args[3][1], &args[4][1], &args[5][1]);
+      //triangles
+      if(spaces == 3) {
+        sscanf(line, "%c %lf %lf %lf", , &args[0], &args[1], &args[2]);
+        add_polygons(poly, v->m[0][args[0]], v->m[1][args[0]], v->m[2][args[0]], 
+                           v->m[0][args[1]], v->m[1][args[1]], v->m[2][args[1]], 
+                           v->m[0][args[2]], v->m[1][args[2]], v->m[2][args[2]]);
+      }
 
-      fgets(line, 255, f);
-      line[strlen(line)-1]='\0';
-      sscanf(line, "%c %lf %lf %lf", &line[0], &args[0][2], &args[1][2], &args[2][2], &args[3][2], &args[4][2], &args[5][2]);
-
-      fgets(line, 255, f);
-      line[strlen(line)-1]='\0';
-      sscanf(line, "%c %lf %lf %lf", &line[0], &args[0][3], &args[1][3], &args[2][3], &args[3][3], &args[4][3], &args[5][3]);
-
-      add_polygons(polys, args[0][0], args[1][0], args[2][0], args[0][1], args[1][1], args[2][1], args[0][2], args[1][2], args[2][2]);
-      add_polygons(polys, args[0][0], args[1][0], args[2][0], args[0][2], args[1][2], args[2][2], args[0][3], args[1][3], args[2][3])
+      //quadrilaterals
+      else if(spaces == 4) {
+        sscanf(line, "%c %lf %lf %lf %lf", , &args[0], &args[1], &args[2], &args[3]);
+        add_polygons(poly, v->m[0][args[0] - 1], v->m[1][args[0] - 1], v->m[2][args[0] - 1], 
+                           v->m[0][args[1] - 1], v->m[1][args[1] - 1], v->m[2][args[1] - 1], 
+                           v->m[0][args[2] - 1], v->m[1][args[2] - 1], v->m[2][args[2] - 1]);
+        add_polygons(poly, v->m[0][args[0] - 1], v->m[1][args[0] - 1], v->m[2][args[0] - 1], 
+                           v->m[0][args[2] - 1], v->m[1][args[2] - 1], v->m[2][args[2] - 1], 
+                           v->m[0][args[3] - 1], v->m[1][args[3] - 1], v->m[2][args[3] - 1]);
+      }
     }
   }
+  fclose(f);
 }
 
 /*======== void draw_scanline() ==========
