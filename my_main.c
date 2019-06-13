@@ -39,6 +39,60 @@
 #include "stack.h"
 #include "gmath.h"
 
+/*======== void mesh() ==========
+  Inputs: struct matrix *polys
+          char *filename
+
+  Mesh parser for .obj files
+  ====================*/
+void mesh(struct matrix *polys, char *filename) {
+  printf("HERE!!!\n");
+  FILE *f;
+  char line[256];
+  f = fopen(filename, "r");
+  struct matrix *v = new_matrix(3, 100);
+  
+  //reads through file line by line
+  while ( fgets(line, 255, f) != NULL ) {
+
+    line[strlen(line)-1]='\0';
+
+    //vertex coordinates
+    if(line[0] == 'v') {
+      if(v->lastcol == v->cols) grow_matrix(v, v->cols * 2);
+      sscanf(line, "%c %lf %lf %lf", &line[0], &v->m[0][v->lastcol], &v->m[1][v->lastcol], &v->m[2][v->lastcol]);
+      v->lastcol++;
+    }
+
+    //vertex shapes
+    else if(line[0] == 'f') {
+      int args[4];
+      int spaces = 0;
+      for(int i = 0; line[i] != '\0'; i++) if (line[i] == ' ') spaces++;
+
+      //triangles
+      if(spaces == 3) {
+        sscanf(line, "%c %d %d %d", &line[0], &args[0], &args[1], &args[2]);
+        add_polygon(polys, v->m[0][args[0]], v->m[1][args[0]], v->m[2][args[0]], 
+                           v->m[0][args[1]], v->m[1][args[1]], v->m[2][args[1]], 
+                           v->m[0][args[2]], v->m[1][args[2]], v->m[2][args[2]]);
+      }
+
+      //quadrilaterals
+      else if(spaces == 4) {
+        sscanf(line, "%c %d %d %d %d", &line[0], &args[0], &args[1], &args[2], &args[3]);
+        add_polygon(polys, v->m[0][args[0] - 1], v->m[1][args[0] - 1], v->m[2][args[0] - 1], 
+                           v->m[0][args[1] - 1], v->m[1][args[1] - 1], v->m[2][args[1] - 1], 
+                           v->m[0][args[2] - 1], v->m[1][args[2] - 1], v->m[2][args[2] - 1]);
+        add_polygon(polys, v->m[0][args[0] - 1], v->m[1][args[0] - 1], v->m[2][args[0] - 1], 
+                           v->m[0][args[2] - 1], v->m[1][args[2] - 1], v->m[2][args[2] - 1], 
+                           v->m[0][args[3] - 1], v->m[1][args[3] - 1], v->m[2][args[3] - 1]);
+      }
+    }
+  }
+  fclose(f);
+}
+
 /*======== void first_pass() ==========
   Inputs:
   Returns:

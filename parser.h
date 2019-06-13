@@ -136,6 +136,7 @@ struct vary_node {
   struct vary_node *next;
 };
 
+void mesh(struct matrix *polys, char *filename);
 void print_knobs();
 void process_knobs();
 void first_pass();

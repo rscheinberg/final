@@ -1,0 +1,4 @@
+frames 50
+basename simple_50
+push
+mesh image.obj

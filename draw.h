@@ -1,4 +1,3 @@
-
 #ifndef DRAW_H
 #define DRAW_H
 
@@ -6,13 +5,11 @@
 #include "ml6.h"
 #include "symtab.h"
 
-void mesh(struct matrix *polys, char *filename);
-
 void draw_scanline(int x0, double z0, int x1, double z1, int y, screen s, zbuffer zb, color c);
 void scanline_convert( struct matrix *points, int i, screen s, zbuffer zb, color il );
 
 //polygon organization
-void add_polygons( struct matrix * polys,
+void add_polygon( struct matrix * polys,
                    double x0, double y0, double z0,
                    double x1, double y1, double z1,
                    double x2, double y2, double z2);
