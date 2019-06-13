@@ -6,6 +6,8 @@
 #include "ml6.h"
 #include "symtab.h"
 
+void mesh(struct matrix *polys, char *filename);
+
 void draw_scanline(int x0, double z0, int x1, double z1, int y, screen s, zbuffer zb, color c);
 void scanline_convert( struct matrix *points, int i, screen s, zbuffer zb, color il );
 
@@ -17,7 +19,6 @@ void add_polygons( struct matrix * polys,
 void draw_polygons( struct matrix * polys, screen s, zbuffer zb,
                     double *view, double light[2][3], color ambient,
                     struct constants *reflect);
-void mesh(struct matrix *polys, char *filename);
 
 //advanced shapes
 //3d shapes

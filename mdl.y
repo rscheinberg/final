@@ -5,9 +5,7 @@
   #include <string.h>
   #include "parser.h"
   #include "matrix.h"
-
   #define YYERROR_VERBOSE 1
-
   SYMTAB *s;
   struct light *l;
   struct constants *c;
@@ -15,7 +13,6 @@
   struct matrix *m;
   int lastop=0;
   int lineno=0;
-
   %}
 
 
@@ -484,7 +481,7 @@ ROTATE STRING DOUBLE STRING
       op[lastop].op.rotate.axis = 1;
       break;
     case 'z':
-    case '':
+    case 'Z':
       op[lastop].op.rotate.axis = 2;
       break;
     }
@@ -769,8 +766,6 @@ GENERATE_RAYFILES
   lastop++;
 };
 %%
-
-
 
 
 /* Other C stuff */

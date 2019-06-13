@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "ml6.h"
 #include "display.h"
@@ -30,32 +31,32 @@ void mesh(struct matrix *polys, char *filename) {
 
     //vertex coordinates
     if(line[0] == 'v') {
-      if(v.lastcol == v.cols) grow_matrix(v, v.cols * 2);
-      sscanf(line, "%c %lf %lf %lf", , &v->m[0][lastcol], &v->m[1][lastcol], &v->m[2][lastcol]);
+      if(v->lastcol == v->cols) grow_matrix(v, v->cols * 2);
+      sscanf(line, "%c %lf %lf %lf", &line[0], &v->m[0][v->lastcol], &v->m[1][v->lastcol], &v->m[2][v->lastcol]);
       v->lastcol++;
     }
 
     //vertex shapes
     else if(line[0] == 'f') {
-      double args[4];
+      int args[4];
       int spaces = 0;
-      for(i = 0; a[i] != '\0'; i++) if (a[i] == ' ') spaces++;
+      for(int i = 0; line[i] != '\0'; i++) if (line[i] == ' ') spaces++;
 
       //triangles
       if(spaces == 3) {
-        sscanf(line, "%c %lf %lf %lf", , &args[0], &args[1], &args[2]);
-        add_polygons(poly, v->m[0][args[0]], v->m[1][args[0]], v->m[2][args[0]], 
+        sscanf(line, "%c %d %d %d", &line[0], &args[0], &args[1], &args[2]);
+        add_polygons(polys, v->m[0][args[0]], v->m[1][args[0]], v->m[2][args[0]], 
                            v->m[0][args[1]], v->m[1][args[1]], v->m[2][args[1]], 
                            v->m[0][args[2]], v->m[1][args[2]], v->m[2][args[2]]);
       }
 
       //quadrilaterals
       else if(spaces == 4) {
-        sscanf(line, "%c %lf %lf %lf %lf", , &args[0], &args[1], &args[2], &args[3]);
-        add_polygons(poly, v->m[0][args[0] - 1], v->m[1][args[0] - 1], v->m[2][args[0] - 1], 
+        sscanf(line, "%c %d %d %d %d", &line[0], &args[0], &args[1], &args[2], &args[3]);
+        add_polygons(polys, v->m[0][args[0] - 1], v->m[1][args[0] - 1], v->m[2][args[0] - 1], 
                            v->m[0][args[1] - 1], v->m[1][args[1] - 1], v->m[2][args[1] - 1], 
                            v->m[0][args[2] - 1], v->m[1][args[2] - 1], v->m[2][args[2] - 1]);
-        add_polygons(poly, v->m[0][args[0] - 1], v->m[1][args[0] - 1], v->m[2][args[0] - 1], 
+        add_polygons(polys, v->m[0][args[0] - 1], v->m[1][args[0] - 1], v->m[2][args[0] - 1], 
                            v->m[0][args[2] - 1], v->m[1][args[2] - 1], v->m[2][args[2] - 1], 
                            v->m[0][args[3] - 1], v->m[1][args[3] - 1], v->m[2][args[3] - 1]);
       }
