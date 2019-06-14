@@ -9,8 +9,19 @@
 
 
 //helper functions for light
-double[2][3] convert(struct light *p);
-struct color add_color(struct color *original, struct color *new);
+void convert(struct light *p, double light[2][3]) {
+	light[LOCATION][0] = p->l[0];
+	light[LOCATION][1] = p->l[1];
+	light[LOCATION][2] = p->l[2];
+	light[COLOR][RED] = p->c[0];
+	light[COLOR][GREEN] = p->c[1];
+	light[COLOR][BLUE] = p->c[2];
+}
+void add_color(color original, color add) {
+	original.red = original.red + add.red;
+	original.blue = original.blue + add.blue;
+	original.green = original.green + add.green;
+}
 
 /*============================================
   IMPORANT NOTE
@@ -45,11 +56,13 @@ color get_lighting( double *normal, double *view, color alight, double light[2][
         {
         case SYM_LIGHT:
           num++;
-          color d2 = calculate_diffuse(convert(symtab[i].s.l), reflect, normal);
-          color s2 = calculate_specular(convert(symtab[i].s.l), reflect, vide, normal);
+		  double fixed[2][3];
+		  convert(symtab[i].s.l, fixed);
+          color d2 = calculate_diffuse(fixed, reflect, normal);
+		  convert(symtab[i].s.l, fixed);
+          color s2 = calculate_specular(fixed, reflect, view, normal);
           add_color(d, d2);
           add_color(s, s2);
-          print_light(symtab[i].s.l);
           break;
     }
   }
