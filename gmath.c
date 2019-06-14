@@ -7,6 +7,11 @@
 #include "ml6.h"
 #include "symtab.h"
 
+
+//helper functions for light
+double[2][3] convert(struct light *p);
+struct color add_color(struct color *original, struct color *new);
+
 /*============================================
   IMPORANT NOTE
 
@@ -19,8 +24,8 @@
   Reflection constants (ka, kd, ks) are represened as arrays of
   doubles (red, green, blue)
   ============================================*/
-
-
+  
+  
 //lighting functions
 color get_lighting( double *normal, double *view, color alight, double light[2][3], struct constants *reflect) {
 
@@ -28,12 +33,30 @@ color get_lighting( double *normal, double *view, color alight, double light[2][
   normalize(normal);
 
   a = calculate_ambient( alight, reflect );
+  
+  //Using SYMTAB
   d = calculate_diffuse( light, reflect, normal );
   s = calculate_specular( light, reflect, view, normal );
+  
+  int num = 1;
+  for (int i = 0; i < lastsym; i++)
+    {
+      switch (symtab[i].type)
+        {
+        case SYM_LIGHT:
+          num++;
+          color d2 = calculate_diffuse(convert(symtab[i].s.l), reflect, normal);
+          color s2 = calculate_specular(convert(symtab[i].s.l), reflect, vide, normal);
+          add_color(d, d2);
+          add_color(s, s2);
+          print_light(symtab[i].s.l);
+          break;
+    }
+  }
 
-  i.red = a.red + d.red + s.red;
-  i.green = a.green + d.green + s.green;
-  i.blue = a.blue + d.blue + s.blue;
+  i.red = a.red + ((d.red + s.red)/num);
+  i.green = a.green + ((d.green + s.green)/num);
+  i.blue = a.blue + ((d.blue + s.blue)/num);
 
   limit_color(&i);
   return i;
