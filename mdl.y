@@ -389,7 +389,6 @@ LINE STRING DOUBLE DOUBLE DOUBLE STRING DOUBLE DOUBLE DOUBLE STRING
   op[lastop].op.line.cs1 = add_symbol($10,SYM_MATRIX,m);
   lastop++;
 }|
-
 MESH CO STRING
 {
   lineno++;
@@ -399,6 +398,7 @@ MESH CO STRING
   op[lastop].op.mesh.cs = NULL;
   lastop++;
 }|
+
 MESH STRING CO STRING
 { /* name and constants */
   lineno++;

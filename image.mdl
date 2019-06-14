@@ -1,4 +1,6 @@
-frames 50
-basename simple_50
-push
-mesh image.obj
+frames 1
+basename image
+rotate x -90
+move 200 400 300
+scale 20 20 20
+mesh : image.obj

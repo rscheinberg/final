@@ -46,7 +46,7 @@
   Mesh parser for .obj files
   ====================*/
 void mesh(struct matrix *polys, char *filename) {
-  printf("HERE!!!\n");
+
   FILE *f;
   char line[256];
   f = fopen(filename, "r");
@@ -54,7 +54,7 @@ void mesh(struct matrix *polys, char *filename) {
   
   //reads through file line by line
   while ( fgets(line, 255, f) != NULL ) {
-
+    
     line[strlen(line)-1]='\0';
 
     //vertex coordinates
@@ -73,9 +73,9 @@ void mesh(struct matrix *polys, char *filename) {
       //triangles
       if(spaces == 3) {
         sscanf(line, "%c %d %d %d", &line[0], &args[0], &args[1], &args[2]);
-        add_polygon(polys, v->m[0][args[0]], v->m[1][args[0]], v->m[2][args[0]], 
-                           v->m[0][args[1]], v->m[1][args[1]], v->m[2][args[1]], 
-                           v->m[0][args[2]], v->m[1][args[2]], v->m[2][args[2]]);
+        add_polygon(polys, v->m[0][args[0]  - 1], v->m[1][args[0] - 1], v->m[2][args[0] - 1], 
+                           v->m[0][args[1] - 1], v->m[1][args[1] - 1], v->m[2][args[1] - 1], 
+                           v->m[0][args[2] - 1], v->m[1][args[2] - 1], v->m[2][args[2] - 1]);
       }
 
       //quadrilaterals
@@ -91,6 +91,7 @@ void mesh(struct matrix *polys, char *filename) {
     }
   }
   fclose(f);
+
 }
 
 /*======== void first_pass() ==========
