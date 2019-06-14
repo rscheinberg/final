@@ -14,6 +14,9 @@
 
 
 #define SPECULAR_EXP 4
+//helper functions for light
+double[2][3] convert(struct light *p);
+struct color add_color(struct color *original, struct color *new);
 
 // lighting functions
 color get_lighting( double *normal, double *view, color alight, double light[2][3], struct constants *reflect);
